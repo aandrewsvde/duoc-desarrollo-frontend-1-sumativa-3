@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PixelForge Games: tienda online de videojuegos con catálogo dinámico, búsqueda y carrito de compras.">
+    <meta name="author" content="Agustín Andrews">
+    <title>PixelForge Games | Tienda de videojuegos</title>
+
+    <link rel="icon" href="assets/img/logo-pixelforge.svg" type="image/svg+xml">
+
+    <!-- Bootstrap 5.3 desde CDN (hoja de estilos) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Hoja de estilos propia (se carga después para poder sobrescribir Bootstrap) -->
+    <link rel="stylesheet" href="assets/css/estilos.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <a class="visually-hidden-focusable btn btn-warning m-2" href="#catalogo">Saltar al catálogo</a>
+
+    <!-- ==================================================================
+         BARRA DE NAVEGACIÓN (Bootstrap navbar, colapsable en móvil)
+         ================================================================== -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-marca sticky-top shadow">
+            <div class="container">
+
+                <a class="navbar-brand d-flex align-items-center gap-2" href="#inicio">
+                    <img src="assets/img/logo-pixelforge.svg" alt="Logotipo de PixelForge Games" width="36" height="36">
+                    <span class="fw-bold">PixelForge Games</span>
+                </a>
+
+                <!-- El carrito y la hamburguesa viven FUERA del menú colapsable:
+                     así en móvil el carrito y su contador siguen visibles sin
+                     tener que desplegar el menú. order-lg-last los manda a la
+                     derecha en escritorio. -->
+                <div class="d-flex align-items-center gap-2 order-lg-last">
+
+                    <button class="btn btn-outline-light position-relative" type="button"
+                        data-bs-toggle="offcanvas" data-bs-target="#panelCarrito" aria-controls="panelCarrito">
+                        Carrito
+                        <span class="badge rounded-pill text-bg-warning position-absolute top-0 start-100 translate-middle"
+                            id="contadorCarrito">0</span>
+                    </button>
+
+                    <!-- Botón hamburguesa: colapsa el menú en pantallas pequeñas -->
+                    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-expanded="false"
+                        aria-label="Abrir o cerrar el menú de navegación">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+
+                <div class="collapse navbar-collapse" id="menuPrincipal">
+
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#inicio">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#catalogo">Catálogo</a>
+                        </li>
+
+                        <!-- Categorías simuladas: cada una filtra el catálogo -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#catalogo" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">Categorías</a>
+                            <ul class="dropdown-menu" id="menuCategorias">
+                                <li><button class="dropdown-item" type="button" data-categoria="Acción">Acción</button></li>
+                                <li><button class="dropdown-item" type="button" data-categoria="Aventura">Aventura</button></li>
+                                <li><button class="dropdown-item" type="button" data-categoria="Carreras">Carreras</button></li>
+                                <li><button class="dropdown-item" type="button" data-categoria="Estrategia">Estrategia</button></li>
+                                <li><button class="dropdown-item" type="button" data-categoria="Rol">Rol</button></li>
+                                <li><button class="dropdown-item" type="button" data-categoria="Puzzle">Puzzle</button></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><button class="dropdown-item fw-semibold" type="button" data-categoria="todas">Ver todas</button></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#resumen-carrito">Mi carrito</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contacto">Contacto</a>
+                        </li>
+                    </ul>
+
+                    <!-- Formulario de búsqueda: dispara el evento submit -->
+                    <form class="d-flex mb-2 mb-lg-0" id="formBusqueda" role="search" novalidate>
+                        <label class="visually-hidden" for="campoBusqueda">Buscar productos</label>
+                        <input class="form-control me-2" type="search" id="campoBusqueda" name="busqueda"
+                            placeholder="Buscar juego..." aria-label="Buscar productos" autocomplete="off">
+                        <button class="btn btn-warning fw-semibold" type="submit">Buscar</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="flex-grow-1">
+
+        <!-- ==============================================================
+             CARRUSEL DE PROMOCIONES
+             ============================================================== -->
+        <section id="inicio" aria-label="Promociones destacadas">
+            <div id="carruselPromos" class="carousel slide" data-bs-ride="carousel">
+
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carruselPromos" data-bs-slide-to="0"
+                        class="active" aria-current="true" aria-label="Promoción 1: Lanzamientos 2026"></button>
+                    <button type="button" data-bs-target="#carruselPromos" data-bs-slide-to="1"
+                        aria-label="Promoción 2: Ofertas de temporada"></button>
+                    <button type="button" data-bs-target="#carruselPromos" data-bs-slide-to="2"
+                        aria-label="Promoción 3: Despacho gratis"></button>
+                </div>
+
+                <div class="carousel-inner">
+
+                    <div class="carousel-item active">
+                        <img src="assets/img/banner-lanzamientos.svg" class="d-block w-100 img-carrusel" alt="">
+                        <!-- El texto va en el caption, no dentro de la imagen, para que
+                             se reajuste con la pantalla en vez de recortarse. -->
+                        <div class="carousel-caption text-start">
+                            <h2 class="fw-bold">Lanzamientos 2026</h2>
+                            <p class="mb-0">Los estrenos del mes, con preventa y clave inmediata.</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="assets/img/banner-ofertas.svg" class="d-block w-100 img-carrusel" alt="">
+                        <div class="carousel-caption text-start">
+                            <h2 class="fw-bold">Ofertas de temporada</h2>
+                            <p class="mb-0">Hasta 50% de descuento en catálogo seleccionado.</p>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="assets/img/banner-despacho.svg" class="d-block w-100 img-carrusel" alt="">
+                        <div class="carousel-caption text-start">
+                            <h2 class="fw-bold">Despacho gratis</h2>
+                            <p class="mb-0">En la Región Metropolitana por compras sobre $ 35.000.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#carruselPromos" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carruselPromos" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ==============================================================
+             CATÁLOGO DE PRODUCTOS (se llena con Fetch API + DOM)
+             ============================================================== -->
+        <section id="catalogo" class="container py-5">
+
+            <div class="row align-items-end g-3 mb-4">
+                <div class="col-lg-7">
+                    <h1 class="h2 fw-bold text-marca mb-1">Catálogo de videojuegos</h1>
+                    <p class="text-secondary mb-0" id="estadoCatalogo" aria-live="polite">
+                        Cargando productos…
+                    </p>
+                </div>
+                <div class="col-lg-5">
+                    <label class="form-label small fw-semibold" for="filtroCategoria">Filtrar por categoría</label>
+                    <select class="form-select" id="filtroCategoria" aria-label="Filtrar productos por categoría">
+                        <option value="todas" selected>Todas las categorías</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Indicador de carga mientras se resuelve la promesa del fetch -->
+            <div id="cargador" class="text-center py-5">
+                <div class="spinner-border text-warning" role="status">
+                    <span class="visually-hidden">Cargando productos…</span>
+                </div>
+                <p class="mt-3 text-secondary">Cargando el catálogo desde el archivo JSON…</p>
+            </div>
+
+            <!-- Zona de mensajes de error amigables (gestión de errores) -->
+            <div id="zonaError" class="d-none" role="alert"></div>
+
+            <!-- Grilla responsiva de tarjetas: 1 col en móvil, 2 en tablet, 3 en escritorio -->
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="grillaProductos"></div>
+        </section>
+
+        <!-- ==============================================================
+             RESUMEN DEL CARRITO (área designada, siempre visible)
+             ============================================================== -->
+        <section id="resumen-carrito" class="bg-light border-top py-5">
+            <div class="container">
+                <div class="row g-4 align-items-center">
+
+                    <div class="col-lg-8">
+                        <h2 class="h4 fw-bold text-marca">Resumen de tu carrito</h2>
+                        <p class="text-secondary" id="mensajeResumen" aria-live="polite">
+                            Tu carrito está vacío. Agrega productos desde el catálogo.
+                        </p>
+                        <ul class="list-group" id="listaResumen"></ul>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h3 class="h6 text-uppercase text-secondary">Total a pagar</h3>
+                                <p class="display-6 fw-bold text-exito mb-1" id="totalResumen">$ 0</p>
+                                <p class="small text-secondary mb-3">
+                                    <span id="unidadesResumen">0</span> unidad(es) en el carrito
+                                </p>
+                                <button class="btn btn-warning w-100 fw-semibold" type="button"
+                                    data-bs-toggle="offcanvas" data-bs-target="#panelCarrito">
+                                    Ver detalle del carrito
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================================================================
+         PIE DE PÁGINA
+         ================================================================== -->
+    <footer id="contacto" class="bg-marca text-light pt-5 pb-4 mt-auto">
+        <div class="container">
+            <div class="row g-4">
+
+                <div class="col-md-4">
+                    <h2 class="h5 text-warning">PixelForge Games</h2>
+                    <p class="small mb-1">Tienda de videojuegos físicos y digitales.</p>
+                    <p class="small text-white-50 mb-0">
+                        Proyecto académico de Desarrollo Frontend I (PFY2201), Semana 6.
+                    </p>
+                </div>
+
+                <div class="col-md-4">
+                    <h2 class="h5 text-warning">Contacto</h2>
+                    <address class="small mb-0">
+                        Avenida Providencia 1234, oficina 502<br>
+                        Providencia, Santiago, Chile<br>
+                        Teléfono: <a class="link-light" href="tel:+56221234567">+56 2 2123 4567</a><br>
+                        Correo: <a class="link-light" href="mailto:contacto@pixelforgegames.cl">contacto@pixelforgegames.cl</a>
+                    </address>
+                </div>
+
+                <div class="col-md-4">
+                    <h2 class="h5 text-warning">Síguenos</h2>
+                    <ul class="list-unstyled small mb-0">
+                        <li><a class="link-light" href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                        <li><a class="link-light" href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+                        <li><a class="link-light" href="https://discord.com" target="_blank" rel="noopener noreferrer">Discord</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <hr class="border-secondary my-4">
+
+            <p class="text-center small text-white-50 mb-0">
+                Copyright &copy; 2026 PixelForge Games &middot; Sitio desarrollado por Agustín Andrews.
+            </p>
+        </div>
+    </footer>
+
+    <!-- ==================================================================
+         PANEL LATERAL DEL CARRITO (offcanvas)
+         ================================================================== -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="panelCarrito" aria-labelledby="tituloPanelCarrito">
+        <div class="offcanvas-header bg-marca text-light">
+            <h2 class="offcanvas-title h5" id="tituloPanelCarrito">Carrito de compras</h2>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="offcanvas-body d-flex flex-column">
+            <p class="text-secondary" id="mensajeCarritoVacio">
+                Todavía no has agregado productos.
+            </p>
+
+            <ul class="list-group list-group-flush mb-3" id="listaCarrito"></ul>
+
+            <div class="mt-auto border-top pt-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="fw-semibold">Total</span>
+                    <span class="h4 fw-bold text-exito mb-0" id="totalCarrito">$ 0</span>
+                </div>
+                <button class="btn btn-outline-danger w-100 mb-2" type="button" id="btnVaciarCarrito">
+                    Vaciar carrito
+                </button>
+                <button class="btn btn-warning w-100 fw-semibold" type="button" id="btnPagar">
+                    Ir a pagar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================================================================
+         MODAL DE DETALLE DE PRODUCTO
+         ================================================================== -->
+    <div class="modal fade" id="modalProducto" tabindex="-1" aria-labelledby="tituloModalProducto" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h2 class="modal-title h5" id="tituloModalProducto">Detalle del producto</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <!-- El cuerpo se rellena dinámicamente al abrir el modal -->
+                <div class="modal-body" id="cuerpoModalProducto"></div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-warning fw-semibold" id="btnAgregarDesdeModal">
+                        Agregar al carrito
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor de notificaciones emergentes (toasts).
+         Van arriba y centradas: abajo a la derecha tapaban el total y los
+         botones del panel del carrito cuando este estaba abierto en móvil. -->
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" id="zonaToasts"></div>
+
+    <!-- Bootstrap 5.3 desde CDN (JavaScript con Popper incluido) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <!-- Scripts propios: primero la lógica pura, después la capa de interfaz -->
+    <script src="assets/js/carrito.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+
+</html>

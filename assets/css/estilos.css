@@ -1,0 +1,234 @@
+/* ==========================================================================
+   estilos.css — Personalización sobre Bootstrap 5.3
+   Asignatura : Desarrollo Frontend I (PFY2201) — Experiencia 2, Semana 6
+   Autor      : Agustín Andrews
+
+   Este archivo NO reemplaza a Bootstrap: solo añade la identidad visual de
+   la tienda (colores de marca) y los pocos ajustes que el framework no
+   cubre. La maquetación y la responsividad las resuelve Bootstrap.
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. VARIABLES DE MARCA
+   ========================================================================== */
+
+:root {
+    --pf-marca: #16233f;          /* Azul noche: barra de navegación y pie */
+    --pf-marca-claro: #24365c;
+    --pf-acento: #f2b705;         /* Ámbar: llamados a la acción */
+    --pf-exito: #2f7a4d;          /* Verde: precios */
+}
+
+
+/* ==========================================================================
+   2. CLASES DE UTILIDAD PROPIAS
+   Siguen la convención de nombres de Bootstrap (bg-, text-) para que el
+   HTML se lea de forma uniforme.
+   ========================================================================== */
+
+.bg-marca {
+    background-color: var(--pf-marca) !important;
+}
+
+.text-marca {
+    color: var(--pf-marca) !important;
+}
+
+.text-exito {
+    color: var(--pf-exito) !important;
+}
+
+
+/* ==========================================================================
+   3. TIPOGRAFÍA
+   ========================================================================== */
+
+body {
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+h1, h2, h3,
+.navbar-brand {
+    font-family: "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
+}
+
+
+/* ==========================================================================
+   4. BARRA DE NAVEGACIÓN
+   ========================================================================== */
+
+/* Franja ámbar que separa la barra del contenido */
+.navbar.bg-marca {
+    border-bottom: 3px solid var(--pf-acento);
+}
+
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link:focus {
+    color: var(--pf-acento);
+}
+
+.navbar-dark .navbar-nav .nav-link.active {
+    color: var(--pf-acento);
+    font-weight: 600;
+}
+
+/* En móvil el menú desplegado necesita algo de aire para no verse apretado */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        padding-top: 0.75rem;
+    }
+}
+
+
+/* ==========================================================================
+   5. CARRUSEL
+   Las imágenes se recortan a una altura fija por breakpoint para que todas
+   las diapositivas midan lo mismo y el carrusel no dé saltos al cambiar.
+   ========================================================================== */
+
+.img-carrusel {
+    height: 180px;
+    object-fit: cover;
+}
+
+@media (min-width: 768px) {
+    .img-carrusel {
+        height: 280px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .img-carrusel {
+        height: 360px;
+    }
+}
+
+/* Bootstrap oculta el caption bajo el breakpoint md. Aquí se muestra en
+   todos los tamaños, alineado a la izquierda y con una escala tipográfica
+   propia, para que el mensaje de la promoción no desaparezca en móvil. */
+.carousel-caption {
+    right: 8%;
+    left: 8%;
+    bottom: 2rem;
+    top: auto;
+    text-align: left;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
+}
+
+.carousel-caption h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.35rem;
+}
+
+.carousel-caption p {
+    font-size: 0.9rem;
+}
+
+@media (min-width: 768px) {
+    .carousel-caption h2 {
+        font-size: 2.25rem;
+    }
+
+    .carousel-caption p {
+        font-size: 1.1rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .carousel-caption {
+        bottom: 3.5rem;
+    }
+
+    .carousel-caption h2 {
+        font-size: 2.75rem;
+    }
+}
+
+
+/* ==========================================================================
+   6. TARJETAS DE PRODUCTO
+   ========================================================================== */
+
+.tarjeta-producto {
+    border-top: 4px solid var(--pf-acento);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.tarjeta-producto:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Las portadas mantienen la misma proporción en toda la grilla */
+.tarjeta-producto .card-img-top {
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background-color: #eef2fa;
+}
+
+
+/* ==========================================================================
+   7. BOTONES
+   ========================================================================== */
+
+.btn-warning {
+    --bs-btn-bg: var(--pf-acento);
+    --bs-btn-border-color: var(--pf-acento);
+    --bs-btn-color: var(--pf-marca);
+    --bs-btn-hover-bg: #d19d04;
+    --bs-btn-hover-border-color: #d19d04;
+    --bs-btn-hover-color: var(--pf-marca);
+}
+
+/* Foco visible en todo elemento interactivo, para navegación por teclado */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+    outline: 3px solid var(--pf-acento);
+    outline-offset: 2px;
+}
+
+
+/* ==========================================================================
+   8. PANEL LATERAL DEL CARRITO
+   ========================================================================== */
+
+.offcanvas {
+    max-width: 90vw;
+}
+
+#contadorCarrito {
+    font-size: 0.7rem;
+}
+
+
+/* ==========================================================================
+   8.1 NOTIFICACIONES
+   Se separan de la barra superior fija para que no queden pegadas a ella.
+   ========================================================================== */
+
+.toast-container {
+    margin-top: 4.5rem;
+    max-width: 92vw;
+}
+
+
+/* ==========================================================================
+   9. PREFERENCIA DE MENOS MOVIMIENTO
+   Respeta la configuración de accesibilidad del sistema operativo.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .tarjeta-producto,
+    .tarjeta-producto:hover {
+        transform: none;
+        transition: none;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
+}
