@@ -11,7 +11,7 @@
       "stock": 12,
       "plataforma": "PC y PlayStation 5",
       "clasificacion": "Para mayores de 7 años",
-      "imagen": "assets/img/juego-neon-racer.svg",
+      "imagen": "img/juego-neon-racer.svg",
       "descripcion": "Carreras arcade en circuitos nocturnos, con 24 pistas y modo multijugador en línea para ocho corredores.",
       "destacado": true
     },
@@ -23,7 +23,7 @@
       "stock": 7,
       "plataforma": "PC y Nintendo Switch",
       "clasificacion": "Para mayores de 12 años",
-      "imagen": "assets/img/juego-reino-cristal.svg",
+      "imagen": "img/juego-reino-cristal.svg",
       "descripcion": "Rol por turnos en un mundo abierto de 60 horas, con historia ramificada y doblaje al español.",
       "destacado": true
     },
@@ -35,7 +35,7 @@
       "stock": 4,
       "plataforma": "PC y Xbox Series X",
       "clasificacion": "Para mayores de 14 años",
-      "imagen": "assets/img/juego-orbita-cero.svg",
+      "imagen": "img/juego-orbita-cero.svg",
       "descripcion": "Acción espacial en primera persona con campaña cooperativa para tres jugadores y modo horda.",
       "destacado": true
     },
@@ -47,7 +47,7 @@
       "stock": 15,
       "plataforma": "Nintendo Switch",
       "clasificacion": "Para mayores de 7 años",
-      "imagen": "assets/img/juego-bosque-runas.svg",
+      "imagen": "img/juego-bosque-runas.svg",
       "descripcion": "Aventura de exploración y acertijos ambientada en un bosque encantado, recomendada para toda la familia.",
       "destacado": false
     },
@@ -59,7 +59,7 @@
       "stock": 9,
       "plataforma": "PC",
       "clasificacion": "Para mayores de 12 años",
-      "imagen": "assets/img/juego-tactica-urbana.svg",
+      "imagen": "img/juego-tactica-urbana.svg",
       "descripcion": "Estrategia por turnos en ciudades reconstruidas, con editor de mapas y campaña de 20 misiónes.",
       "destacado": false
     },
@@ -71,7 +71,7 @@
       "stock": 23,
       "plataforma": "PC y móviles",
       "clasificacion": "Para todo público",
-      "imagen": "assets/img/juego-puzzle-prisma.svg",
+      "imagen": "img/juego-puzzle-prisma.svg",
       "descripcion": "Cien niveles de ingenio basados en la refracción de la luz y espejos móviles que se desplazan por el tablero.",
       "destacado": false
     }

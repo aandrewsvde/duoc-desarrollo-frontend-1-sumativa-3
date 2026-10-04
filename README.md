@@ -1,172 +1,150 @@
-# PixelForge Games — Tienda de videojuegos con Bootstrap 5 y JavaScript
+# PixelForge Games — eCommerce en React
 
-Actividad **sumativa** de la Semana 6 — *Optimizando la Lógica y Rendimiento de una Página Web con JavaScript*
-Asignatura: **Desarrollo Frontend I (PFY2201)** — Experiencia 2
+Actividad **sumativa** de la Semana 8 — *Mejorando funcionalidades clave en el eCommerce con React*
+Asignatura: **Desarrollo Frontend I (PFY2201)** — Experiencia 3
 Autor: **Agustín Andrews**
 
-eCommerce de una página construido con **Bootstrap 5.3** para la maquetación responsiva y
-**JavaScript** para la interactividad: catálogo cargado con la **Fetch API** desde un archivo JSON
-local, búsqueda, filtros y un carrito de compras que manipula el DOM en tiempo real.
+eCommerce de videojuegos construido con **React 19** y **Vite 8**. La aplicación gestiona su estado
+con `useState`, carga el catálogo con `useEffect` y usa **renderizado condicional** para adaptar la
+interfaz a lo que está ocurriendo.
+
+**Sitio en línea:** https://aandrewsvde.github.io/duoc-desarrollo-frontend-1-sumativa-3/
 
 ---
 
-## Cómo ejecutar el proyecto
-
-> **Importante:** el catálogo se carga con `fetch()`. Por seguridad, los navegadores bloquean esa
-> lectura cuando la página se abre con doble clic (protocolo `file://`). Hay que servirla por HTTP.
+## Cómo ejecutarlo
 
 ```bash
-cd Agustin_Andrews_PFY2201_Optimizacion_Semana6
-python3 -m http.server 8000
+npm install
+npm run dev
 ```
 
-Luego abre **http://localhost:8000** en el navegador.
+Vite imprime la URL completa al arrancar. Como el `base` está fijado para GitHub Pages, la
+aplicación se sirve en `http://localhost:5173/duoc-desarrollo-frontend-1-sumativa-3/`, la misma
+ruta que en producción.
 
-Si aun así se abre con doble clic, la página no falla en silencio: muestra un mensaje que explica
-la causa y cómo solucionarla. En GitHub Pages funciona directamente, porque ya se sirve por HTTP.
+| Comando | Qué hace |
+|---|---|
+| `npm run dev` | Servidor de desarrollo con recarga en caliente |
+| `npm run build` | Genera el build de producción en `dist/` |
+| `npm run preview` | Sirve el build tal como quedará publicado |
+| `npm run lint` | Revisa el código con oxlint |
+| `npm run deploy` | Compila y publica en la rama `gh-pages` |
 
 ---
 
 ## Estructura del proyecto
 
 ```
-Agustin_Andrews_PFY2201_Optimizacion_Semana6/
-├── index.html                     Página principal del eCommerce
-├── assets/
-│   ├── css/
-│   │   └── estilos.css            Personalización sobre Bootstrap
-│   ├── js/
-│   │   ├── carrito.js             Lógica del carrito (sin DOM)
-│   │   └── app.js                 Fetch, render del DOM y eventos
-│   ├── img/
-│   │   ├── logo-pixelforge.svg    Logotipo
-│   │   ├── banner-*.svg           Fondos del carrusel (3)
-│   │   └── juego-*.svg            Portadas de producto (6)
-│   └── data/
-│       └── productos.json         Catálogo que consume la Fetch API
-├── capturas/                      Capturas de pantalla de la entrega
-├── VERIFICACION.md                Informe de pruebas
-└── README.md
+.
+├── index.html
+├── vite.config.js              base de GitHub Pages
+├── package.json                scripts, incluido deploy
+├── public/
+│   ├── data/productos.json     catálogo que carga useEffect
+│   └── img/                    logotipo y portadas (SVG)
+├── src/
+│   ├── main.jsx                punto de entrada, importa Bootstrap
+│   ├── App.jsx                 estado central y composición
+│   ├── index.css               identidad visual sobre Bootstrap
+│   ├── components/
+│   │   ├── Header.jsx              barra superior y contador
+│   │   ├── BuscadorProductos.jsx   filtros de búsqueda y categoría
+│   │   ├── CatalogoProductos.jsx   grilla de tarjetas
+│   │   ├── ProductoCard.jsx        tarjeta individual
+│   │   ├── Carrito.jsx             panel del carrito
+│   │   ├── EstadoCarga.jsx         carga y errores
+│   │   └── Footer.jsx              pie de página
+│   ├── hooks/
+│   │   └── useProductos.js     hook propio: useEffect + fetch
+│   └── utils/
+│       └── formato.js          funciones puras reutilizables
+└── capturas/
 ```
 
+El estado vive en `App.jsx` y baja por **props**; los componentes hijos solo avisan de lo que el
+usuario hizo. Así hay un único dueño de cada dato y no pueden desincronizarse.
+
 ---
 
-## Qué hace el sitio
+## Dónde está cada cosa
 
-### Maquetación con Bootstrap 5.3
-Bootstrap se carga **desde CDN** con `integrity` y `crossorigin`, como enseña la guía de la Semana 4.
-Componentes utilizados: `navbar` con colapso, `dropdown`, `carousel`, `card`, sistema de
-cuadrículas (`row-cols-*`), `modal`, `offcanvas`, `toast`, `alert`, `badge`, `spinner` y
-`list-group`. El archivo `estilos.css` solo añade los colores de marca y unos pocos ajustes: la
-maquetación y la responsividad las resuelve el framework.
+### `useState` — gestión de estados
 
-| Dispositivo | Ancho | Tarjetas por fila | Barra de navegación |
-|---|---|---|---|
-| Móvil | < 768 px | 1 | Colapsada (botón hamburguesa) |
-| Tablet | 768 – 991 px | 2 | Colapsada (botón hamburguesa) |
-| Escritorio | ≥ 992 px | 3 | Desplegada |
-
-### Barra de navegación
-Enlaces a las secciones, menú desplegable de **seis categorías simuladas** que filtran el catálogo,
-formulario de búsqueda y botón del carrito con una insignia que muestra las unidades. En pantallas
-menores a 992 px se colapsa en el botón hamburguesa.
-
-### Carga de datos con la Fetch API
-`app.js` pide `assets/data/productos.json`, comprueba `response.ok`, convierte la respuesta con
-`.json()` y valida que traiga un arreglo `productos` con los campos obligatorios antes de usarlo.
-Mientras tanto se muestra un `spinner`.
-
-### Gestión de errores
-Si algo falla se muestra una alerta con:
-
-1. **Qué pasó**, en lenguaje sencillo.
-2. **La causa probable** — detecta si la página se abrió con `file://` y lo explica.
-3. **Cómo solucionarlo**, con el comando exacto.
-4. El **detalle técnico** (código HTTP o mensaje) en letra pequeña.
-5. Un botón **Reintentar** que vuelve a lanzar la carga sin recargar la página.
-
-El detalle completo del error también se registra con `console.error()` para depuración.
-
-### Eventos gestionados
-
-| Evento | Dónde | Qué hace |
+| Estado | Archivo | Para qué |
 |---|---|---|
-| `click` | Botón "Agregar al carrito" | Suma el producto al carrito |
-| `submit` | Formulario de búsqueda | Filtra el catálogo, con `preventDefault()` |
-| `click` | Botón "Ver detalle" | Abre el modal con los datos del producto |
-| `click` | Botones +, − y Quitar | Ajustan las cantidades del carrito |
-| `click` | Vaciar / Ir a pagar | Dejan el carrito en cero |
-| `click` | Menú de categorías | Filtra por categoría |
-| `change` | Select de categoría | Filtra por categoría |
-| `click` | Botón Reintentar | Reintenta la carga del catálogo |
+| `productos` | `hooks/useProductos.js` | La lista del catálogo |
+| `cargando`, `error` | `hooks/useProductos.js` | Situación de la petición |
+| `carrito` | `App.jsx` | Productos seleccionados |
+| `busqueda` | `App.jsx` | Texto del buscador |
+| `categoria` | `App.jsx` | Categoría filtrada |
+| `carritoVisible` | `App.jsx` | Elemento interactivo: el botón que alterna entre "Ver carrito" y "Ocultar carrito" |
 
-Los botones de las tarjetas y del carrito se crean dinámicamente, así que sus eventos se registran
-por **delegación**: un solo `addEventListener` en el contenedor atiende a todos los botones, en vez
-de volver a asociarlos en cada renderizado.
+Las acciones del carrito nunca modifican el arreglo existente: crean uno nuevo con `map`, `filter`
+o propagación. React compara referencias para detectar cambios, así que mutar el estado anterior no
+provocaría un nuevo renderizado.
 
-### Manipulación del DOM
-Las tarjetas se construyen con `createElement` y se insertan en un `DocumentFragment`, de modo que
-la grilla completa entra al DOM en una sola operación. Los textos se asignan con `textContent`, no
-con `innerHTML`, para que el contenido del JSON nunca se interprete como HTML.
+### `useEffect` — efectos secundarios
 
-El carrito tiene **tres vistas** (insignia de la barra, panel lateral y resumen de la página) que se
-redibujan desde un mismo estado con una única función, `renderizarCarrito()`, para que no puedan
-quedar desincronizadas.
+1. **`hooks/useProductos.js`** — carga el catálogo desde `public/data/productos.json` al montar el
+   componente. Comprueba `response.ok`, valida que el JSON traiga un arreglo `productos` con los
+   campos obligatorios, y guarda el resultado en el estado. Incluye función de limpieza para no
+   actualizar el estado si el componente se desmonta con la petición en vuelo. Su array de
+   dependencias contiene `intento`, que es cómo funciona el botón **Reintentar** sin recargar la
+   página.
+2. **`App.jsx`** — sincroniza el título de la pestaña con el carrito: pasa a `(3) PixelForge Games`
+   cuando hay productos y vuelve al título original al vaciarlo. Depende de `unidades`.
 
-### Organización del código
-El JavaScript está dividido en dos archivos con responsabilidades separadas:
+### Renderizado condicional
 
-- **`carrito.js`** — lógica pura del carrito y utilidades de formato. No toca el DOM ni conoce
-  Bootstrap, así que se puede probar de forma aislada. El estado es privado (patrón módulo) y solo
-  se modifica a través de la API que expone.
-- **`app.js`** — capa de interfaz: Fetch, construcción del DOM y eventos. Va dentro de una IIFE con
-  `'use strict'` para no contaminar el ámbito global.
-
-Ambos archivos están comentados por secciones y cada función lleva su bloque JSDoc.
-
----
-
-## Verificación
-
-Ver **[VERIFICACION.md](VERIFICACION.md)**: 54 comprobaciones automatizadas sobre el sitio en
-ejecución, en Chromium y Firefox, incluyendo la simulación de un fallo de carga del JSON.
+| Dónde | Qué alterna |
+|---|---|
+| `ProductoCard.jsx` | "Agregar al carrito" ⇄ "En el carrito (n)", cambiando también el color del botón |
+| `ProductoCard.jsx` | Insignia "Stock: n" ⇄ "Sin stock", con el botón deshabilitado |
+| `Carrito.jsx` | Mensaje "Tu carrito está vacío" ⇄ lista de productos |
+| `Header.jsx` | "Ver carrito" ⇄ "Ocultar carrito"; la insignia y el total solo aparecen si hay productos |
+| `App.jsx` | Panel del carrito visible u oculto; catálogo o `EstadoCarga` |
+| `EstadoCarga.jsx` | Indicador de carga ⇄ alerta de error con botón de reintento |
+| `CatalogoProductos.jsx` | Grilla ⇄ aviso de "ningún producto coincide" |
+| `BuscadorProductos.jsx` | El botón "Limpiar filtros" solo aparece si hay algún filtro activo |
 
 ---
 
 ## Publicación en GitHub Pages
 
-Desde la carpeta del proyecto:
+El `base` de `vite.config.js` es lo que hace que funcione. Sin él, el despliegue sube bien pero el
+navegador busca los archivos JS y CSS en la raíz del dominio y la página sale en blanco.
 
-```bash
-git init
-git add .
-git commit -m "Semana 6: eCommerce con Bootstrap 5, Fetch API y carrito dinamico"
-git branch -M main
+```js
+base: '/duoc-desarrollo-frontend-1-sumativa-3/'
 ```
 
-Crear el repositorio público y subir la rama principal:
+Para publicar:
 
 ```bash
-gh repo create pixelforge-games-semana6 --public --source=. --remote=origin --push
+npm run deploy
 ```
 
-Publicar el sitio en la rama `gh-pages`:
+Ese script compila y sube el contenido de `dist/` a la rama `gh-pages`. Después, en
+**Settings → Pages** del repositorio, la rama debe ser `gh-pages` y la carpeta `/ (root)`.
 
-```bash
-git checkout -b gh-pages
-git push -u origin gh-pages
-git checkout main
-```
-
-Después, en **Settings → Pages**, seleccionar la rama `gh-pages` y la carpeta `/ (root)`.
-La URL queda como `https://<usuario>.github.io/pixelforge-games-semana6/`.
+> Si se renombra el repositorio en GitHub, hay que actualizar `base` en `vite.config.js` y
+> `homepage` en `package.json`, o el sitio publicado dejará de cargar.
 
 > Si el push devuelve un error 403, revisa que tu token de GitHub tenga el permiso
-> **Contents: Read and write**, o usa SSH en lugar de HTTPS.
+> **Contents: Read and write**, o configura el remoto por SSH.
+
+---
+
+## Verificación
+
+Ver **[VERIFICACION.md](VERIFICACION.md)**: 50 comprobaciones automatizadas sobre la aplicación en
+ejecución, en Chromium y Firefox, contra el build de producción servido en la misma ruta que
+GitHub Pages.
 
 ---
 
 ## Nota sobre el contenido
 
 Los nombres de los videojuegos, los precios y los datos de la tienda son **ficticios** y fueron
-creados para esta actividad académica. Las imágenes son SVG generados para el proyecto.
+creados para esta actividad académica. Las portadas son SVG generados para el proyecto.

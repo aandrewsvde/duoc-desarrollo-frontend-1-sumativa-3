@@ -1,0 +1,93 @@
+/* ==========================================================================
+   index.css — Identidad visual de PixelForge Games sobre Bootstrap 5
+   Asignatura : Desarrollo Frontend I (PFY2201) — Experiencia 3, Semana 8
+   Autor      : Agustín Andrews
+
+   Bootstrap resuelve la maquetación y la responsividad. Aquí solo se añaden
+   los colores de marca y unos pocos ajustes visuales.
+   ========================================================================== */
+
+:root {
+  --pf-marca: #16233f;    /* Azul noche: barra superior y pie */
+  --pf-acento: #f2b705;   /* Ámbar: llamados a la acción */
+  --pf-exito: #2f7a4d;    /* Verde: precios */
+}
+
+body {
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #f4f6fb;
+}
+
+h1, h2, h3,
+.navbar-brand {
+  font-family: "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
+}
+
+/* --- Utilidades propias, nombradas como las de Bootstrap --- */
+
+.bg-marca {
+  background-color: var(--pf-marca) !important;
+}
+
+.text-marca {
+  color: var(--pf-marca) !important;
+}
+
+.text-exito {
+  color: var(--pf-exito) !important;
+}
+
+/* --- Barra de navegación --- */
+
+.navbar.bg-marca {
+  border-bottom: 3px solid var(--pf-acento);
+}
+
+/* --- Tarjetas de producto --- */
+
+.tarjeta-producto {
+  border-top: 4px solid var(--pf-acento);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.tarjeta-producto:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Las portadas conservan la misma proporción en toda la grilla */
+.tarjeta-producto .card-img-top {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background-color: #eef2fa;
+}
+
+/* --- Botones --- */
+
+.btn-warning {
+  --bs-btn-bg: var(--pf-acento);
+  --bs-btn-border-color: var(--pf-acento);
+  --bs-btn-color: var(--pf-marca);
+  --bs-btn-hover-bg: #d19d04;
+  --bs-btn-hover-border-color: #d19d04;
+  --bs-btn-hover-color: var(--pf-marca);
+}
+
+/* Foco visible para quien navega con teclado */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--pf-acento);
+  outline-offset: 2px;
+}
+
+/* --- Respeta la preferencia de menos movimiento del sistema --- */
+
+@media (prefers-reduced-motion: reduce) {
+  .tarjeta-producto,
+  .tarjeta-producto:hover {
+    transform: none;
+    transition: none;
+  }
+}
