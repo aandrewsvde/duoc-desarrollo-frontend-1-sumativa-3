@@ -134,16 +134,6 @@ Ese script compila y sube el contenido de `dist/` a la rama `gh-pages`. Después
 > Si el push devuelve un error 403, revisa que tu token de GitHub tenga el permiso
 > **Contents: Read and write**, o configura el remoto por SSH.
 
----
-
-## Verificación
-
-Ver **[VERIFICACION.md](VERIFICACION.md)**: 50 comprobaciones automatizadas sobre la aplicación en
-ejecución, en Chromium y Firefox, contra el build de producción servido en la misma ruta que
-GitHub Pages.
-
----
-
 ## Nota sobre el contenido
 
 Los nombres de los videojuegos, los precios y los datos de la tienda son **ficticios** y fueron
